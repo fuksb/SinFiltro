@@ -10,6 +10,11 @@ $uri = urldecode($uri);
 // Remove leading slash
 $uri = ltrim($uri, '/');
 
+// Skip webhooks and API endpoints - let them pass through
+if (strpos($uri, 'webhooks/') === 0 || strpos($uri, 'api/') === 0) {
+    return false;
+}
+
 // If empty, serve index.php
 if ($uri === '') {
     return false; // Let PHP serve index.php

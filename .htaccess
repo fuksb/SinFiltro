@@ -6,25 +6,22 @@
 # ── URL Rewriting (Clean URLs) ─────────────────────────
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
     
-    # Remove .php extension
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.+)\.php$ /$1 [R=301,L]
+    # If request is for a real file or directory, serve it
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
     
-    # Handle clean URLs
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.php [L]
+    # Add .php extension and serve
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+)$ $1.php [L]
     
-    # Block direct access to /data/ directory
+    # Block sensitive files
     RewriteRule ^data(/.*)?$  -  [F,L]
     RewriteRule ^ai-helper\.php$  -  [F,L]
     RewriteRule ^config\.php$     -  [F,L]
     RewriteRule ^_header\.php$    -  [F,L]
     RewriteRule ^_footer\.php$    -  [F,L]
-    RewriteRule ^_migrate_css\.php$ - [F,L]
 </IfModule>
 
 # ── Block sensitive files ─────────────────────────────

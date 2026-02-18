@@ -1,11 +1,24 @@
 # =====================================================
 # SinFiltros — Apache config
-# Security, compression, caching
+# Security, compression, caching, URL rewriting
 # =====================================================
 
-# ── Block direct access to /data/ directory ──────────
+# ── URL Rewriting (Clean URLs) ─────────────────────────
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
+    
+    # Remove .php extension
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.+)\.php$ /$1 [R=301,L]
+    
+    # Handle clean URLs
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.php [L]
+    
+    # Block direct access to /data/ directory
     RewriteRule ^data(/.*)?$  -  [F,L]
     RewriteRule ^ai-helper\.php$  -  [F,L]
     RewriteRule ^config\.php$     -  [F,L]

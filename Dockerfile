@@ -42,5 +42,5 @@ RUN cd src/scraper && npm install puppeteer
 # Expose port
 EXPOSE 80
 
-# Start PHP built-in server
-CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
+# Start PHP built-in server with router for clean URLs
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public", "public/router.php"]

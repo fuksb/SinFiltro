@@ -1,0 +1,89 @@
+# =====================================================
+# SinFiltros — Apache config
+# Security, compression, caching, URL rewriting
+# =====================================================
+
+# ── Custom Error Pages ───────────────────────────────────
+ErrorDocument 404 /404.php
+
+# ── URL Rewriting (Clean URLs) ─────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # If request is for a real file or directory, serve it
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # Add .php extension and serve
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+)$ $1.php [L]
+    
+    # Block sensitive files
+    RewriteRule ^data(/.*)?$  -  [F,L]
+    RewriteRule ^ai-helper\.php$  -  [F,L]
+    RewriteRule ^config\.php$     -  [F,L]
+    RewriteRule ^_header\.php$    -  [F,L]
+    RewriteRule ^_footer\.php$    -  [F,L]
+</IfModule>
+
+# ── Block sensitive files ─────────────────────────────
+<FilesMatch "(\.env|\.env\..*)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block log, txt, md files from being served directly
+<FilesMatch "\.(log|md)$">
+    Require all denied
+</FilesMatch>
+
+# ── Security headers ──────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options    "nosniff"
+    Header always set X-Frame-Options           "SAMEORIGIN"
+    Header always set X-XSS-Protection          "1; mode=block"
+    Header always set Referrer-Policy           "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy        "geolocation=(), microphone=(), camera=()"
+    # Uncomment when on HTTPS:
+    # Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+</IfModule>
+
+# ── Gzip compression ──────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ── Browser caching for static assets ────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                  "access plus 30 days"
+    ExpiresByType application/javascript    "access plus 30 days"
+    ExpiresByType image/svg+xml             "access plus 30 days"
+    ExpiresByType image/png                 "access plus 30 days"
+    ExpiresByType image/jpeg                "access plus 30 days"
+    ExpiresByType image/webp                "access plus 30 days"
+    ExpiresByType text/html                 "access plus 0 seconds"
+</IfModule>
+
+# ── PHP settings ──────────────────────────────────────
+<IfModule mod_php.c>
+    # Hide PHP version from headers
+    php_flag expose_php Off
+    # Limit upload size (affects file attachments)
+    php_value upload_max_filesize 8M
+    php_value post_max_size 10M
+    php_value max_execution_time 90
+    php_value max_input_time 90
+</IfModule>
+
+# ── Prevent access to hidden files ───────────────────
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

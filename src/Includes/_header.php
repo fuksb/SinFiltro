@@ -1,14 +1,20 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 $navItems = [
-  ['href' => 'index.php',       'icon' => 'fa-house',         'label' => 'Inicio'],
-  ['href' => 'coche.php',       'icon' => 'fa-car-side',      'label' => 'Coches'],
-  ['href' => 'hipoteca.php',    'icon' => 'fa-percent',       'label' => 'Hipotecas'],
-  ['href' => 'luz.php',         'icon' => 'fa-bolt',          'label' => 'Luz'],
-  ['href' => 'telco.php',       'icon' => 'fa-mobile-screen', 'label' => 'Telefonía'],
-  ['href' => 'seguros.php',     'icon' => 'fa-umbrella',      'label' => 'Seguros'],
-  ['href' => 'inversiones.php', 'icon' => 'fa-chart-pie',     'label' => 'Inversiones'],
+  ['href' => '/',           'icon' => 'fa-house',         'label' => 'Inicio'],
+  ['href' => '/coche',      'icon' => 'fa-car-side',      'label' => 'Coches'],
+  ['href' => '/hipoteca',   'icon' => 'fa-percent',       'label' => 'Hipotecas'],
+  ['href' => '/luz',        'icon' => 'fa-bolt',          'label' => 'Luz'],
+  ['href' => '/telco',      'icon' => 'fa-mobile-screen', 'label' => 'Telefonía'],
+  ['href' => '/seguros',    'icon' => 'fa-umbrella',      'label' => 'Seguros'],
+  ['href' => '/inversiones','icon' => 'fa-chart-pie',     'label' => 'Inversiones'],
 ];
+
+// Helper para detectar página activa con URLs limpias
+function getCleanPage($href) {
+    if ($href === '/') return 'index.php';
+    return ltrim($href, '/') . '.php';
+}
 ?>
 <style>
 /* ── Page transitions ── */
@@ -106,13 +112,13 @@ header.scrolled {
 </style>
 
 <header>
-  <a class="logo" href="index.php">
+  <a class="logo" href="/">
     <div class="logo-icon">SF</div>
     <div class="logo-text">Sin<span>Filtros</span></div>
   </a>
   <nav class="nav-desktop">
     <?php foreach ($navItems as $item): ?>
-    <a class="nav-link<?= $currentPage === $item['href'] ? ' active' : '' ?>"
+    <a class="nav-link<?= $currentPage === getCleanPage($item['href']) ? ' active' : '' ?>"
        href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>">
       <i class="fa <?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?>"></i> <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
     </a>
@@ -126,8 +132,8 @@ header.scrolled {
 <!-- Mobile menu (outside header, fixed) -->
 <div class="nav-mobile-menu" id="nav-mobile-menu" role="navigation">
   <?php foreach ($navItems as $item): ?>
-  <a class="nav-link<?= $currentPage === $item['href'] ? ' active' : '' ?>"
-     href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>">
+    <a class="nav-link<?= $currentPage === getCleanPage($item['href']) ? ' active' : '' ?>"
+       href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>">
     <i class="fa <?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?>"></i> <?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
   </a>
   <?php endforeach; ?>

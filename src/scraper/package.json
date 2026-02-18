@@ -1,0 +1,12 @@
+{
+  "name": "sinfiltro-scraper",
+  "version": "1.0.0",
+  "description": "Scraper with Puppeteer for SinFiltro",
+  "main": "scraper.js",
+  "scripts": {
+    "scrape": "node scraper.js"
+  },
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  }
+}

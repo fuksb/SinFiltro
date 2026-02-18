@@ -3,6 +3,9 @@
 # Security, compression, caching, URL rewriting
 # =====================================================
 
+# ── Custom Error Pages ───────────────────────────────────
+ErrorDocument 404 /404.php
+
 # ── URL Rewriting (Clean URLs) ─────────────────────────
 <IfModule mod_rewrite.c>
     RewriteEngine On

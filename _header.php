@@ -1,13 +1,13 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 $navItems = [
-  ['href' => 'index.php',       'icon' => 'fa-house',         'label' => 'Inicio'],
-  ['href' => 'coche.php',       'icon' => 'fa-car-side',      'label' => 'Coches'],
-  ['href' => 'hipoteca.php',    'icon' => 'fa-percent',       'label' => 'Hipotecas'],
-  ['href' => 'luz.php',         'icon' => 'fa-bolt',          'label' => 'Luz'],
-  ['href' => 'telco.php',       'icon' => 'fa-mobile-screen', 'label' => 'Telefonía'],
-  ['href' => 'seguros.php',     'icon' => 'fa-umbrella',      'label' => 'Seguros'],
-  ['href' => 'inversiones.php', 'icon' => 'fa-chart-pie',     'label' => 'Inversiones'],
+  ['href' => 'index',       'icon' => 'fa-house',         'label' => 'Inicio'],
+  ['href' => 'coche',       'icon' => 'fa-car-side',      'label' => 'Coches'],
+  ['href' => 'hipoteca',    'icon' => 'fa-percent',       'label' => 'Hipotecas'],
+  ['href' => 'luz',         'icon' => 'fa-bolt',          'label' => 'Luz'],
+  ['href' => 'telco',       'icon' => 'fa-mobile-screen', 'label' => 'Telefonía'],
+  ['href' => 'seguros',     'icon' => 'fa-umbrella',      'label' => 'Seguros'],
+  ['href' => 'inversiones', 'icon' => 'fa-chart-pie',     'label' => 'Inversiones'],
 ];
 ?>
 <style>

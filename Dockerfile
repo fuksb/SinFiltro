@@ -2,7 +2,6 @@ FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
     curl \
     libpng-dev \
     libonig-dev \
@@ -12,7 +11,8 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     chromium \
-    chromium-driver
+    chromium-driver \
+    git
 
 # Set environment for Puppeteer
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
@@ -33,18 +33,14 @@ WORKDIR /app
 # Copy application files
 COPY . .
 
+# Install PHP dependencies (if composer.json exists)
+RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader; fi
+
 # Install Node.js dependencies for scraper
 RUN cd src/scraper && npm install puppeteer
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
-
 # Expose port
 EXPOSE 80
-
-# Environment variables (set these in Coolify dashboard)
-# ENV GEMINI_API_KEY=your_key_here
-# ENV CLAUDE_API_KEY=your_key_here
 
 # Start PHP built-in server
 CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
